@@ -1,13 +1,22 @@
-#include "Helper.h"
-#include "Dynamic.h"
+#include "core.h"
 #include <iostream>
 
-int main() {
-	std::cout << gm::sqr(5) << std::endl;
+bool Update(float dt) {
+	return false;
+}
 
-	gm::point p1{ 10,10 };
-	gm::point p2{ 10,10 };
-	gm::point p3 = p1 + p2;
-	
-	std::cout << p3.x << " " << p3.y << std::endl;
+void Draw(Core::Graphics& graphics) {
+	for (int i = 0; i < 30; i++) {
+		graphics.SetColor(RGB(rand() % 256, rand() % 256, rand() % 256));
+		graphics.DrawLine(static_cast<float>(rand() % 801), static_cast<float>(rand() % 601), static_cast<float>(rand() % 801), static_cast<float>(rand() % 601));
+	}
+}
+
+int main() {
+	char name[] = "CSC196";
+	Core::Init(name, 800, 600);
+	Core::RegisterUpdateFn(Update);
+	Core::RegisterDrawFn(Draw);
+	Core::GameLoop();
+	Core::Shutdown();
 }
