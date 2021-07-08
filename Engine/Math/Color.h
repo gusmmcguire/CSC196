@@ -12,7 +12,11 @@ namespace gme {
 			b = ((rgb >> 16) & 0xff) / 255.0f;
 		}
 
+		Color operator + (const Color& color) const { return { r + color.r, g + color.g, b + color.b }; }
+		Color operator - (const Color& color) const { return { r - color.r, g - color.g, b - color.b }; }
+
 		Color operator * (const float s) const { return { s * r, s * g, s * b }; }
+
 		operator DWORD() const { return ToRGB(); }
 		
 		DWORD ToRGB() const {
