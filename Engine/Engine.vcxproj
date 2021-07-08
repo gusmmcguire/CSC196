@@ -30,6 +30,7 @@
     <ClCompile Include="Graphics\Shape.cpp" />
     <ClCompile Include="Math\Color.cpp" />
     <ClCompile Include="Math\Random.cpp" />
+    <ClCompile Include="Math\Vector2.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
