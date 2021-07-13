@@ -1,16 +1,9 @@
-#include "core.h"
-#include "Math/Vector2.h"
-#include "Math/Color.h"
-#include "Math/Random.h"
-#include "Math/MathUtils.h"
-#include "Graphics/Shape.h"
 #include "Engine.h"
 #include <iostream>
 #include <string>
 #include <vector>
 
-
-std::vector<gme::Vector2> points = { {-5,-5}, {5,-5}, {0,10}, {-5,-5} };
+std::vector<gme::Vector2> points = { {-5,-7}, {0,-4}, {5,-7}, {0,7},{-5,-7} };
 gme::Shape shape{ points, gme::Color{0 , 1 , 0 } };
 gme::Transform transform{ {400,300}, 0, 3 };
 
@@ -39,13 +32,14 @@ bool Update(float dt) {
 
 		std::vector<gme::Color> colors{ gme::Color::white, gme::Color::red, gme::Color::green,gme::Color::blue, gme::Color::purple, gme::Color::cyan,gme::Color::orange,gme::Color::yellow };
 		engine.Get<gme::ParticleSystem>()->Create(psPosition, 150, 2, colors[gme::RandomRangeInt(0,colors.size())], 150);
+		engine.Get<gme::AudioSystem>()->PlayAudio("explosion");
 	}
 
 	float thrust = 0;
 	if (Core::Input::IsPressed('A') || Core::Input::IsPressed(Core::Input::KEY_LEFT)) {transform.rotation -= gme::DegToRad(180) * dt;}
-	if (Core::Input::IsPressed('D') || Core::Input::IsPressed(Core::Input::KEY_RIGHT)) {transform.rotation += gme::DegToRad(180) * dt;}
+	if (Core::Input::IsPressed('D') || Core::Input::IsPressed(Core::Input::KEY_RIGHT)) { transform.rotation += gme::DegToRad(180) * dt; }
 	if (Core::Input::IsPressed('W') || Core::Input::IsPressed(Core::Input::KEY_UP)) {thrust = speed;}
-	
+
 	transform.position += gme::Vector2::Rotate(gme::Vector2::down, transform.rotation) * thrust * dt;
 	transform.position.x = gme::Wrap(transform.position.x, 0.0f, 800.0f);
 	transform.position.y = gme::Wrap(transform.position.y, 0.0f, 600.0f);
@@ -72,11 +66,12 @@ void Draw(Core::Graphics& graphics) {
 
 int main() {
 	char name[] = "CSC196";
-	Core::Init(name, 800, 600, 60);
+	Core::Init(name, 800, 600);
 	Core::RegisterUpdateFn(Update);
 	Core::RegisterDrawFn(Draw);
 	
 	engine.Startup();
+	engine.Get<gme::AudioSystem>()->AddAudio("explosion", "explosion.wav");
 
 	Core::GameLoop();
 	Core::Shutdown();

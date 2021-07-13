@@ -1,5 +1,20 @@
 #pragma once
+
+//systems
 #include "Graphics/ParticleSystem.h"
+#include "Audio/AudioSystem.h"
+
+//math
+#include "Math/Vector2.h"
+#include "Math/Color.h"
+#include "Math/Random.h"
+#include "Math/MathUtils.h"
+
+//graphics
+#include "Graphics/Shape.h"
+
+#include "core.h"
+
 #include <vector>
 #include <memory>
 

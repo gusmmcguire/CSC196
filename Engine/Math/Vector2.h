@@ -21,10 +21,10 @@ namespace gme {
 		Vector2 operator / (const Vector2& v) const { return { x / v.x , y / v.y }; }
 
 		//scalor math
-		Vector2 operator + (const float s) const { return { s + x, s + y }; }
-		Vector2 operator - (const float s) const { return { s - x, s - y }; }
-		Vector2 operator * (const float s) const { return { s * x, s * y }; }
-		Vector2 operator / (const float s) const { return { s / x, s / y }; }
+		Vector2 operator + (const float s) const { return { s + x , s + y }; }
+		Vector2 operator - (const float s) const { return { x - s , y - s }; }
+		Vector2 operator * (const float s) const { return { s * x , s * y }; }
+		Vector2 operator / (const float s) const { return { x / s , y / x }; }
 		
 		//vector math
 		Vector2 operator += (const Vector2& v) { x += v.x; y += v.y; return *this; }
