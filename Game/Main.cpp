@@ -1,13 +1,15 @@
 #include "Engine.h"
+#include "Actors/Player.h"
+#include "Actors/Enemy.h"
 #include <iostream>
 #include <string>
 #include <vector>
 
 std::vector<gme::Vector2> points = { {-5,-7}, {0,-4}, {5,-7}, {0,7},{-5,-7} };
 gme::Shape shape{ points, gme::Color{0 , 1 , 0 } };
+gme::Shape shape2{ points, gme::Color{1 , 0 , 0 } };
 gme::Transform transform{ {400,300}, 0, 3 };
 
-const float speed = 250;
 float timer = 0;
 gme::Vector2 psPosition;
 
@@ -15,6 +17,9 @@ float deltaTime;
 float gameTime = 0;
 
 gme::Engine engine;
+gme::Scene scene;
+
+
 
 bool Update(float dt) {
 	deltaTime = dt;
@@ -35,25 +40,14 @@ bool Update(float dt) {
 		engine.Get<gme::AudioSystem>()->PlayAudio("explosion");
 	}
 
-	float thrust = 0;
-	if (Core::Input::IsPressed('A') || Core::Input::IsPressed(Core::Input::KEY_LEFT)) {transform.rotation -= gme::DegToRad(180) * dt;}
-	if (Core::Input::IsPressed('D') || Core::Input::IsPressed(Core::Input::KEY_RIGHT)) { transform.rotation += gme::DegToRad(180) * dt; }
-	if (Core::Input::IsPressed('W') || Core::Input::IsPressed(Core::Input::KEY_UP)) {thrust = speed;}
-
-	transform.position += gme::Vector2::Rotate(gme::Vector2::down, transform.rotation) * thrust * dt;
-	transform.position.x = gme::Wrap(transform.position.x, 0.0f, 800.0f);
-	transform.position.y = gme::Wrap(transform.position.y, 0.0f, 600.0f);
-	
-	engine.Get<gme::ParticleSystem>()->Create(transform.position, 2, 0.5, gme::Color::white, 50);
-
+	scene.Update(dt);
 	engine.Update(dt);
 	
 	return quit;
 }
 
 void Draw(Core::Graphics& graphics) {
-	float scale = 1 + (std::sin(timer) + 1) * 2;
-	shape.Draw(graphics,transform);
+	scene.Draw(graphics);
 	engine.Get<gme::ParticleSystem>()->Draw(graphics);
 
 	gme::Color color = gme::Lerp(gme::Color::green, gme::Color::orange, transform.position.x / 800);
@@ -62,6 +56,15 @@ void Draw(Core::Graphics& graphics) {
 	graphics.DrawString(10, 25, std::to_string(gameTime).c_str());
 	graphics.DrawString(10, 40, std::to_string(1/deltaTime).c_str());
 	graphics.DrawString(10, 55, std::to_string(psPosition.Length()).c_str());
+
+}
+
+void Init() {
+	engine.Get<gme::AudioSystem>()->AddAudio("explosion", "explosion.wav");
+	scene.AddActor(new Player{ { {400,300}, 0, 3 }, &shape, 250 });
+	for (size_t i = 0; i < 100; i++) {
+		scene.AddActor(new Enemy{ { {gme::RandomRange(0,800),gme::RandomRange(0,600)}, gme::RandomRange(0,gme::TwoPi), 2 }, &shape2, 250 });
+	}
 }
 
 int main() {
@@ -71,7 +74,7 @@ int main() {
 	Core::RegisterDrawFn(Draw);
 	
 	engine.Startup();
-	engine.Get<gme::AudioSystem>()->AddAudio("explosion", "explosion.wav");
+	Init();
 
 	Core::GameLoop();
 	Core::Shutdown();

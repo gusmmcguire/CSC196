@@ -13,6 +13,10 @@
 //graphics
 #include "Graphics/Shape.h"
 
+//objects
+#include "Base/Actor.h"
+#include "Base/Scene.h"
+
 #include "core.h"
 
 #include <vector>
