@@ -3,7 +3,7 @@
 
 class Enemy : public gme::Actor {
 public:
-	Enemy(const gme::Transform& transform, gme::Shape* shape, float speed) : gme::Actor{ transform,shape }, speed{ speed }{}
+	Enemy(const gme::Transform& transform, std::shared_ptr<gme::Shape> shape, float speed) : gme::Actor{ transform,shape }, speed{ speed }{}
 
 	void Update(float dt) override;
 
