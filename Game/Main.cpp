@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "Actors/Player.h"
 #include "Actors/Enemy.h"
+#include "Actors/Projectile.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -40,8 +41,8 @@ bool Update(float dt) {
 		engine.Get<gme::AudioSystem>()->PlayAudio("explosion");
 	}
 
-	scene.GetActor<Player>()->shape->color = gme::Color{ gme::RandomRange(0.0f,1.0f),gme::RandomRange(0.0f,1.0f),gme::RandomRange(0.0f,1.0f) };
-	scene.GetActor<Enemy>()->shape->color = gme::Color{ gme::RandomRange(0,1),gme::RandomRange(0,1),gme::RandomRange(0,1) };
+	//scene.GetActor<Player>()->shape->color = gme::Color{ gme::RandomRange(0.0f,1.0f),gme::RandomRange(0.0f,1.0f),gme::RandomRange(0.0f,1.0f) };
+	//scene.GetActor<Enemy>()->shape->color = gme::Color{ gme::RandomRange(0,1),gme::RandomRange(0,1),gme::RandomRange(0,1) };
 
 	scene.Update(dt);
 	engine.Update(dt);
@@ -59,6 +60,7 @@ void Draw(Core::Graphics& graphics) {
 	graphics.DrawString(10, 25, std::to_string(gameTime).c_str());
 	graphics.DrawString(10, 40, std::to_string(1/deltaTime).c_str());
 	graphics.DrawString(10, 55, std::to_string(psPosition.Length()).c_str());
+	graphics.DrawString(10, 70, std::to_string(scene.GetActors<Projectile>().size()).c_str());
 
 }
 
@@ -66,10 +68,10 @@ void Init() {
 	std::shared_ptr<gme::Shape> shape1 = std::make_shared<gme::Shape>(points, gme::Color{ 0 , 1 , 0 });
 	std::shared_ptr<gme::Shape> shape2 = std::make_shared<gme::Shape>( points, gme::Color{1 , 0 , 0 } );
 
-	Player pl{ gme::Transform{ gme::Vector2{400.0f,300.0f}, 0.0f, 3.0f }, shape1, 250 };
+	//Player pl{ gme::Transform{ gme::Vector2{400.0f,300.0f}, 0.0f, 3.0f }, shape1, 250 };
 	engine.Get<gme::AudioSystem>()->AddAudio("explosion", "explosion.wav");
 	scene.AddActor(std::make_unique<Player>( gme::Transform{ gme::Vector2{400.0f,300.0f}, 0.0f, 3.0f }, shape1, 250.0f ));
-	for (size_t i = 0; i < 100; i++) {
+	for (size_t i = 0; i < 10; i++) {
 		scene.AddActor(std::make_unique<Enemy>(gme::Transform{ gme::Vector2{gme::RandomRange(0.0f,800.0f),gme::RandomRange(0.0f,600.0f)}, gme::RandomRange(0,gme::TwoPi), 2.0f }, shape2, 250.0f ));
 	}
 }

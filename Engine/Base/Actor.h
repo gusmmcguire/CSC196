@@ -16,8 +16,10 @@ namespace gme {
 		virtual void Draw(Core::Graphics& graphics);
 
 	public:
+		bool destroy{ false };
+
 		Transform transform;
 		std::shared_ptr<Shape> shape;
-		Scene* scene = nullptr;
+		Scene* scene{ nullptr };
 	};
 }

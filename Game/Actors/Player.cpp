@@ -22,11 +22,11 @@ void Player::Update(float dt){
 
 	//fire
 	if (Core::Input::IsPressed(VK_SPACE)) {
-		std::vector<gme::Vector2> points = { {0,-4}, {3,-3}, {4,0}, {3,3}, {0,4}, {-3,3},{-4,0},{-3,-3},{0,-4} };
-		std::shared_ptr<gme::Shape> shape1 = std::make_shared<gme::Shape>(points, gme::Color{ 0 , 1 , 0 });
+		std::shared_ptr<gme::Shape> shape = std::make_shared<gme::Shape>();
+		shape->Load("bullet.txt");
 		gme::Transform t = transform;
 		t.scale = 0.5f;
-		scene->AddActor(std::make_unique<Projectile>(transform, shape1, 600.0f));
+		scene->AddActor(std::make_unique<Projectile>(transform, shape, 600.0f));
 		
 	}
 

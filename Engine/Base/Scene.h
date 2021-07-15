@@ -2,6 +2,7 @@
 #include "Object.h"
 #include "core.h"
 #include <list>
+#include <vector>
 #include <memory>
 
 namespace gme {
@@ -13,9 +14,14 @@ namespace gme {
 		void Draw(Core::Graphics& graphics);
 
 		void AddActor(std::unique_ptr<Actor> actor);
+		void RemoveActor(Actor* actor);
+		void RemoveAllActors();
 
 		template <typename T>
 		T* GetActor();
+
+		template <typename T>
+		std::vector<T*> GetActors();
 
 	private:
 		std::list<std::unique_ptr<Actor>> actors;
@@ -29,6 +35,18 @@ namespace gme {
 		}
 
 		return nullptr;
+	}
+
+	template<typename T>
+	inline std::vector<T*> Scene::GetActors()
+	{
+		std::vector<T*> result;
+
+		for (auto& actor : actors) {
+			if (dynamic_cast<T*>(actor.get())) result.push_back(dynamic_cast<T*>(actor.get()));
+		}
+
+		return result;
 	}
 
 }
