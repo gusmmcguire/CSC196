@@ -25,7 +25,7 @@ namespace gme{
 		if (stream.is_open()) {
 			success = true;
 
-			color = Color::green;
+			stream >> color;
 
 			std::string line;
 			std::getline(stream, line);

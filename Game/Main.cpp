@@ -65,14 +65,17 @@ void Draw(Core::Graphics& graphics) {
 }
 
 void Init() {
-	std::shared_ptr<gme::Shape> shape1 = std::make_shared<gme::Shape>(points, gme::Color{ 0 , 1 , 0 });
-	std::shared_ptr<gme::Shape> shape2 = std::make_shared<gme::Shape>( points, gme::Color{1 , 0 , 0 } );
+	scene.engine = &engine;
 
-	//Player pl{ gme::Transform{ gme::Vector2{400.0f,300.0f}, 0.0f, 3.0f }, shape1, 250 };
+	std::shared_ptr<gme::Shape> playerShape = std::make_shared<gme::Shape>();
+	playerShape->Load("player.txt");
+	std::shared_ptr<gme::Shape> enemyShape = std::make_shared<gme::Shape>();
+	enemyShape->Load("enemy.txt");
+
 	engine.Get<gme::AudioSystem>()->AddAudio("explosion", "explosion.wav");
-	scene.AddActor(std::make_unique<Player>( gme::Transform{ gme::Vector2{400.0f,300.0f}, 0.0f, 3.0f }, shape1, 250.0f ));
+	scene.AddActor(std::make_unique<Player>( gme::Transform{ gme::Vector2{400.0f,300.0f}, 0.0f, 3.0f }, playerShape, 250.0f ));
 	for (size_t i = 0; i < 10; i++) {
-		scene.AddActor(std::make_unique<Enemy>(gme::Transform{ gme::Vector2{gme::RandomRange(0.0f,800.0f),gme::RandomRange(0.0f,600.0f)}, gme::RandomRange(0,gme::TwoPi), 2.0f }, shape2, 250.0f ));
+		scene.AddActor(std::make_unique<Enemy>(gme::Transform{ gme::Vector2{gme::RandomRange(0.0f,800.0f),gme::RandomRange(0.0f,600.0f)}, gme::RandomRange(0,gme::TwoPi), 2.0f }, enemyShape, 250.0f ));
 	}
 }
 

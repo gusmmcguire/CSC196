@@ -1,5 +1,7 @@
 #pragma once
 #include "Core.h"
+#include <iostream>
+
 namespace gme {
 	struct Color {
 		float r, g, b;
@@ -26,6 +28,8 @@ namespace gme {
 			
 			return (red | green << 8 | blue << 16);
 		}
+
+		friend std::istream& operator >> (std::istream& stream, Color& c);
 
 		static const Color white;
 		static const Color red ;
