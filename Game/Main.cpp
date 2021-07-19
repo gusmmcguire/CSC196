@@ -1,35 +1,10 @@
-#include "Engine.h"
-#include "Actors/Player.h"
-#include "Actors/Enemy.h"
-#include "Actors/Projectile.h"
-#include <iostream>
-#include <string>
-#include <vector>
+#include "Game.h"
 
-std::vector<gme::Vector2> points = { {-5,-7}, {0,-4}, {5,-7}, {0,7},{-5,-7} };
-
-gme::Transform transform{ {400,300}, 0, 3 };
-
-float timer = 0;
-gme::Vector2 psPosition;
-
-float deltaTime;
-float gameTime = 0;
-
-gme::Engine engine;
-gme::Scene scene;
-
-
+Game game;
 
 bool Update(float dt) {
-	deltaTime = dt;
-	gameTime += dt;
-
 	bool quit = Core::Input::IsPressed(Core::Input::KEY_ESCAPE);
-	timer += dt * 5;
-
-
-	int x, y;
+	/*int x, y;
 	Core::Input::GetMousePos(x, y);
 	psPosition.x = static_cast<float>(x);
 	psPosition.y = static_cast<float>(y);
@@ -39,44 +14,14 @@ bool Update(float dt) {
 		std::vector<gme::Color> colors{ gme::Color::white, gme::Color::red, gme::Color::green,gme::Color::blue, gme::Color::purple, gme::Color::cyan,gme::Color::orange,gme::Color::yellow };
 		engine.Get<gme::ParticleSystem>()->Create(psPosition, 150, 2, colors[gme::RandomRangeInt(0,colors.size())], 150);
 		engine.Get<gme::AudioSystem>()->PlayAudio("explosion");
-	}
+	}*/
+	game.Update(dt);
 
-	//scene.GetActor<Player>()->shape->color = gme::Color{ gme::RandomRange(0.0f,1.0f),gme::RandomRange(0.0f,1.0f),gme::RandomRange(0.0f,1.0f) };
-	//scene.GetActor<Enemy>()->shape->color = gme::Color{ gme::RandomRange(0,1),gme::RandomRange(0,1),gme::RandomRange(0,1) };
-
-	scene.Update(dt);
-	engine.Update(dt);
-	
 	return quit;
 }
 
 void Draw(Core::Graphics& graphics) {
-	scene.Draw(graphics);
-	engine.Get<gme::ParticleSystem>()->Draw(graphics);
-
-	gme::Color color = gme::Lerp(gme::Color::green, gme::Color::orange, transform.position.x / 800);
-	graphics.SetColor(color);
-	graphics.DrawString(10, 10, std::to_string(deltaTime).c_str());
-	graphics.DrawString(10, 25, std::to_string(gameTime).c_str());
-	graphics.DrawString(10, 40, std::to_string(1/deltaTime).c_str());
-	graphics.DrawString(10, 55, std::to_string(psPosition.Length()).c_str());
-	graphics.DrawString(10, 70, std::to_string(scene.GetActors<Projectile>().size()).c_str());
-
-}
-
-void Init() {
-	scene.engine = &engine;
-
-	std::shared_ptr<gme::Shape> playerShape = std::make_shared<gme::Shape>();
-	playerShape->Load("player.txt");
-	std::shared_ptr<gme::Shape> enemyShape = std::make_shared<gme::Shape>();
-	enemyShape->Load("enemy.txt");
-
-	engine.Get<gme::AudioSystem>()->AddAudio("explosion", "explosion.wav");
-	scene.AddActor(std::make_unique<Player>( gme::Transform{ gme::Vector2{400.0f,300.0f}, 0.0f, 3.0f }, playerShape, 250.0f ));
-	for (size_t i = 0; i < 10; i++) {
-		scene.AddActor(std::make_unique<Enemy>(gme::Transform{ gme::Vector2{gme::RandomRange(0.0f,800.0f),gme::RandomRange(0.0f,600.0f)}, gme::RandomRange(0,gme::TwoPi), 2.0f }, enemyShape, 250.0f ));
-	}
+	game.Draw(graphics);
 }
 
 int main() {
@@ -85,11 +30,10 @@ int main() {
 	Core::RegisterUpdateFn(Update);
 	Core::RegisterDrawFn(Draw);
 	
-	engine.Startup();
-	Init();
+	game.Initialize();
 
 	Core::GameLoop();
 	Core::Shutdown();
 
-	engine.Shutdown();
+	game.Shutdown();
 }
