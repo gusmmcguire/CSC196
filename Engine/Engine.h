@@ -4,6 +4,9 @@
 #include "Graphics/ParticleSystem.h"
 #include "Audio/AudioSystem.h"
 
+//framework
+#include "Framework/EventSystem.h"
+
 //math
 #include "Math/Vector2.h"
 #include "Math/Color.h"
@@ -17,10 +20,11 @@
 #include "Base/Actor.h"
 #include "Base/Scene.h"
 
+#define NOMINMAX
 #include "core.h"
-
 #include <vector>
 #include <memory>
+#include <algorithm>
 
 namespace gme {
 	class Engine {
@@ -29,6 +33,7 @@ namespace gme {
 		void Shutdown();
 
 		void Update(float dt);
+		void Draw(Core::Graphics& graphics);
 
 		template<typename T>
 		T* Get();

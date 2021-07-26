@@ -21,5 +21,3 @@ namespace gme {
 		std::map<std::string, FMOD::Sound*> sounds;
 	};
 }
-
-extern gme::AudioSystem audioSystem;

@@ -1,7 +1,5 @@
 #include "AudioSystem.h"
 
-gme::AudioSystem audioSystem;
-
 namespace gme
 {
 	void AudioSystem::Startup()

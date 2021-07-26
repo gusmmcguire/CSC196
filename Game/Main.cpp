@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <variant>
 
 Game game;
 
@@ -25,6 +26,9 @@ void Draw(Core::Graphics& graphics) {
 }
 
 int main() {
+
+	//system("pause");
+
 	char name[] = "CSC196";
 	Core::Init(name, 800, 600);
 	Core::RegisterUpdateFn(Update);

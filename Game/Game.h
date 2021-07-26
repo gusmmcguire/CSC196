@@ -18,6 +18,12 @@ public:
 	void Update(float dt);
 	void Draw(Core::Graphics& graphics);
 
+private:
+	void UpdateTitle(float dt);
+	void UpdateStartLevel(float dt);
+	void OnAddPoints(const gme::Event& event);
+	void OnPlayerDead(const gme::Event& event);
+
 public:
 	std::unique_ptr<gme::Engine> engine;
 	std::unique_ptr<gme::Scene> scene;

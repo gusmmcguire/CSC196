@@ -10,6 +10,8 @@ void Game::Initialize() {
 	scene->engine = engine.get();
 
 	engine->Get<gme::AudioSystem>()->AddAudio("explosion", "explosion.wav");
+	engine->Get<gme::EventSystem>()->Subscribe("AddPoints", std::bind(&Game::OnAddPoints,this,std::placeholders::_1));
+	engine->Get<gme::EventSystem>()->Subscribe("PlayerDead", std::bind(&Game::OnPlayerDead,this,std::placeholders::_1));
 }
 
 void Game::Shutdown(){
@@ -41,7 +43,7 @@ void Game::Update(float dt){
 
 
 		scene->AddActor(std::make_unique<Player>(gme::Transform{ gme::Vector2{400.0f,300.0f}, 0.0f, 3.0f }, playerShape, 250.0f));
-		for (size_t i = 0; i < 10; i++) {
+		for (size_t i = 0; i < 2; i++) {
 			scene->AddActor(std::make_unique<Enemy>(gme::Transform{ gme::Vector2{gme::RandomRange(0.0f,800.0f),gme::RandomRange(0.0f,600.0f)}, gme::RandomRange(0,gme::TwoPi), 2.0f }, enemyShape, 250.0f));
 		}
 
@@ -76,6 +78,8 @@ void Game::Draw(Core::Graphics& graphics){
 	case Game::eState::Game:
 		break;
 	case Game::eState::GameOver:
+		graphics.SetColor(gme::Color::red);
+		graphics.DrawString(322, 305 + static_cast<int>(std::sin(stateTimer * 4) * 10), "Game Over");
 		break;
 	default:
 		break;
@@ -86,5 +90,23 @@ void Game::Draw(Core::Graphics& graphics){
 	graphics.DrawString(770, 20, std::to_string(lives).c_str());
 
 	scene->Draw(graphics);
-	engine->Get<gme::ParticleSystem>()->Draw(graphics);
+	engine->Draw(graphics);
+}
+
+void Game::UpdateTitle(float dt)
+{
+}
+
+void Game::UpdateStartLevel(float dt)
+{
+}
+
+void Game::OnAddPoints(const gme::Event& event){
+	score += std::get<int>(event.data);
+}
+
+void Game::OnPlayerDead(const gme::Event& event) {
+	lives--;
+	std::cout << std::get<std::string>(event.data) << std::endl;
+	state = eState::GameOver;
 }

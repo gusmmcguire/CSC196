@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Enemy.h"
 #include "Math/MathUtils.h"
 #include "Projectile.h"
 #include "Engine.h"
@@ -28,7 +29,9 @@ void Player::Update(float dt){
 		shape->Load("bullet.txt");
 		gme::Transform t = transform;
 		t.scale = 0.5f;
-		scene->AddActor(std::make_unique<Projectile>(transform, shape, 600.0f));
+		std::unique_ptr<Projectile> projectile = std::make_unique<Projectile>(transform, shape, 600.0f);
+		projectile->tag = "Player";
+		scene->AddActor(std::move(projectile));
 		
 	}
 
@@ -38,3 +41,16 @@ void Player::Update(float dt){
 	}
 }
 
+void Player::OnCollision(Actor* actor) {
+	if (dynamic_cast<Enemy*>(actor) || (dynamic_cast<Projectile*>(actor) && actor->tag == "Enemy")) {
+		scene->engine->Get<gme::AudioSystem>()->PlayAudio("explosion");
+		scene->engine->Get<gme::ParticleSystem>()->Create(transform.position, 200, 1, gme::Color::orange, 50);
+		destroy = true;
+		actor->destroy = true;
+
+		gme::Event event;
+		event.name = "PlayerDead";
+		event.data = std::string("yes i'm dead!");
+		scene->engine->Get<gme::EventSystem>()->Notify(event);
+	}
+}

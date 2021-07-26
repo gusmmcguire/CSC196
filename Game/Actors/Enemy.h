@@ -1,5 +1,6 @@
 #pragma once
 #include "Base/Actor.h"
+#include "Math/Random.h"
 
 class Enemy : public gme::Actor {
 public:
@@ -10,4 +11,7 @@ public:
 
 private:
 	float speed = 250;
+	float fireRate = 1.5f;
+	float fireTimer = 0;
+	int pointsWorth = static_cast<int>(gme::RandomRange(50, 300));
 };

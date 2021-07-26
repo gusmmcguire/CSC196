@@ -1,5 +1,6 @@
 #include "Shape.h"
 #include <fstream>
+#include <algorithm>
 
 namespace gme{
 	void Shape::Draw(Core::Graphics& graphics, const Vector2& position, float angle, float scale){
@@ -35,8 +36,17 @@ namespace gme{
 				stream >> point;
 				points.push_back(point);
 			}
+			ComputeRadius();
 		}
 
+		
 		return success;
+	}
+	
+	void Shape::ComputeRadius(){
+		for (Vector2& point : points) {
+			radius = std::max(radius, point.Length());
+		}
+		//std::for_each(points.begin(), points.end(), [radius](auto& point) {radius = std::max(radius, point.Length()); });
 	}
 }

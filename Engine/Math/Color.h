@@ -1,4 +1,5 @@
 #pragma once
+#define NOMINMAX
 #include "Core.h"
 #include <iostream>
 
