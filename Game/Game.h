@@ -1,13 +1,16 @@
 #pragma once
 #include "Engine.h"
+#include "Actors/RoomBlock.h"
 
 class Game {
 public:
 	enum class eState {
 		Title,
 		StartGame,
-		StartLevel,
-		Game,
+		StartLevel1,
+		Game1,
+		StartLevel2,
+		Game2,
 		GameOver
 	};
 
@@ -24,6 +27,9 @@ private:
 	void OnAddPoints(const gme::Event& event);
 	void OnPlayerDead(const gme::Event& event);
 
+	void MakeRoomOne();
+	void MakeRoomTwo();
+
 public:
 	std::unique_ptr<gme::Engine> engine;
 	std::unique_ptr<gme::Scene> scene;
@@ -35,4 +41,5 @@ private:
 	size_t score = 0;
 	size_t lives = 0;
 
+	std::vector<RoomBlock> roomActors;
 };

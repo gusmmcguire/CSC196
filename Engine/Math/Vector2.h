@@ -7,6 +7,7 @@ namespace gme {
 		float x, y;
 
 		Vector2() : x{ 0 }, y{ 0 } {};
+		Vector2(float x) : x{ x }, y{ x }{}
 		Vector2(float x, float y) : x{ x }, y{ y }{};
 		Vector2(int x, int y) : x{ static_cast<float>(x) }, y{ static_cast<float>(y) }{};
 
@@ -74,7 +75,7 @@ namespace gme {
 	}
 
 	inline Vector2 Vector2::Normalized() const {
-		return *this / Length();
+		return (Length() != 0) ? *this / Length() : Vector2::zero;
 	}
 
 	inline void Vector2::Normalize() {

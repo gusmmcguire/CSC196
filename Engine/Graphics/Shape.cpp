@@ -14,8 +14,8 @@ namespace gme{
 	void Shape::Draw(Core::Graphics& graphics, const Transform& transform){
 		graphics.SetColor(color);
 		for (size_t i = 0; i < points.size() - 1; i++) {
-			Vector2 p1 = (transform.position + (Vector2::Rotate(points[i], transform.rotation) * transform.scale));
-			Vector2 p2 = (transform.position + (Vector2::Rotate(points[i + 1], transform.rotation) * transform.scale));
+			Vector2 p1 = transform.matrix*points[i];
+			Vector2 p2 = transform.matrix*points[i+1];
 			graphics.DrawLine(p1.x, p1.y, p2.x, p2.y);
 		}
 	}
@@ -37,6 +37,9 @@ namespace gme{
 				points.push_back(point);
 			}
 			ComputeRadius();
+			ComputeCorner();
+			ComputeWidth();
+			ComputeHeight();
 		}
 
 		
@@ -48,5 +51,35 @@ namespace gme{
 			radius = std::max(radius, point.Length());
 		}
 		//std::for_each(points.begin(), points.end(), [radius](auto& point) {radius = std::max(radius, point.Length()); });
+	}
+
+	void Shape::ComputeWidth() {
+		float x = points[0].x;
+		for (int q = 0; q < points.size(); q++) {
+			if (points[q].x > x) x = points[q].x;
+		}
+		width = x - topLeftCorner.x;
+	}
+
+	void Shape::ComputeHeight(){
+		float y = points[0].y;
+		for (int q = 0; q < points.size(); q++) {
+			if (points[q].y > y) y = points[q].y;
+		}
+		height = y - topLeftCorner.y;
+	}
+
+	void Shape::ComputeCorner(){
+		float leftX = points[0].x;
+		for (int q = 0; q < points.size(); q++) {
+			if (points[q].x < leftX) leftX = points[q].x;
+		}
+
+		float topY = points[0].y;
+		for (int q = 0; q < points.size(); q++) {
+			if (points[q].y < topY) topY = points[q].y;
+		}
+
+		topLeftCorner = { leftX, topY };
 	}
 }
