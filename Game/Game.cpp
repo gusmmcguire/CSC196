@@ -92,7 +92,7 @@ void Game::Draw(Core::Graphics& graphics){
 	{
 	case Game::eState::Title:
 		graphics.SetColor(gme::Color::cyan);
-		graphics.DrawString(350, 290 + static_cast<int>(std::sin(stateTimer * 4) * 10), "Shooty Game");
+		graphics.DrawString(345, 290 + static_cast<int>(std::sin(stateTimer * 4) * 10), "Maze Type Game");
 		graphics.SetColor(gme::Color::red);
 		graphics.DrawString(322, 305 + static_cast<int>(std::sin(stateTimer * 4) * 10), "Press Space To Start");
 		break;
